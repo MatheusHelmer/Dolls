@@ -1,0 +1,7 @@
+'use client';
+import {useState} from 'react';
+export default function Login(){
+ const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+ async function submit(e:React.FormEvent){e.preventDefault();setBusy(true);setError('');try{const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});if(!r.ok)throw Error((await r.json()).error);window.location.assign('/');}catch(e){setError(e instanceof Error?e.message:'Não foi possível entrar.');}finally{setBusy(false)}}
+ return <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:24,background:'#f6f7fb'}}><section className="panel" style={{width:'100%',maxWidth:420,padding:32}}><h1 style={{fontSize:32,fontWeight:800,color:'#6859e8'}}>Livre</h1><p style={{margin:'12px 0 24px'}}>Suas finanças, no seu controle.</p><form onSubmit={submit} className="bank-form"><label>E-mail<input type="email" autoComplete="username" required value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Senha<input type="password" autoComplete="current-password" required value={password} onChange={e=>setPassword(e.target.value)}/></label>{error&&<p className="error" role="alert">{error}</p>}<button className="primary" disabled={busy}>{busy?'Entrando…':'Entrar'}</button></form><p style={{fontSize:12,marginTop:20}}>Use sua conta pessoal cadastrada no Supabase.</p></section></main>
+}
