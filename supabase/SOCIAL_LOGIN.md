@@ -1,19 +1,13 @@
-# Login Google e GitHub
+# Login somente com Google
 
-O app inicia OAuth com PKCE em `/auth/start` e troca o código pela sessão em `/auth/callback`. Apenas o e-mail definido em SUPABASE_OWNER_EMAIL pode entrar. A conta usada no Google ou GitHub precisa ter esse e-mail verificado.
+O Livre usa OAuth Google com PKCE e cookies HttpOnly. O login por senha e o provedor GitHub estão desativados no aplicativo. Apenas o e-mail SUPABASE_OWNER_EMAIL pode entrar.
 
-## Ativar os provedores
+No Google Auth Platform, crie um cliente OAuth Web Application. Use apenas openid, email e profile. Adicione o domínio de produção da Vercel como origem autorizada e este URI de redirecionamento:
 
-No Supabase, Authentication → Sign In / Providers, habilite Google e/ou GitHub e salve o Client ID e Client Secret do respectivo aplicativo OAuth. Esses segredos ficam no Supabase, nunca no GitHub ou no navegador.
+https://xowgrbnnefhqywilmlnq.supabase.co/auth/v1/callback
 
-Em ambos os provedores, o callback a cadastrar é:
+Se estiver em modo de teste, adicione o proprietário como usuário de teste. Salve Client ID e Client Secret em Supabase → Authentication → Sign In / Providers → Google; nunca no GitHub.
 
-`https://xowgrbnnefhqywilmlnq.supabase.co/auth/v1/callback`
+Em Supabase → URL Configuration, Site URL = URL de produção do Livre e Redirect URLs = essa URL acrescida de /auth/callback.
 
-Google: crie um OAuth Client do tipo Web Application no Google Auth Platform. Adicione o domínio de produção da Vercel como origem autorizada e o callback Supabase acima como URI de redirecionamento. Use apenas openid, email e profile. Se o aplicativo estiver em teste, adicione o proprietário aos usuários de teste.
-
-GitHub: Settings → Developer settings → OAuth Apps → New OAuth App. Homepage URL = URL de produção na Vercel; Authorization callback URL = callback Supabase acima. Copie Client ID e Client Secret para o provedor GitHub no Supabase.
-
-No Supabase, Authentication → URL Configuration: Site URL = domínio de produção; Redirect URLs = `https://SEU-DOMINIO-VERCEL/auth/callback`. Use o domínio real e não autorize domínios desconhecidos. Para testar localmente, adicione `http://localhost:5182/auth/callback`.
-
-Abra o Livre e escolha Continuar com Google ou Continuar com GitHub. Se usar outra conta, a sessão será encerrada e o aplicativo continuará privado. A configuração das credenciais é necessária antes do teste completo com o provedor.
+A conta escolhida no Google deve usar o e-mail proprietário do Livre. Contas diferentes são recusadas e a sessão é encerrada.
