@@ -1,6 +1,7 @@
 import 'server-only';
 import {createServerClient} from '@supabase/ssr';
 import {cookies} from 'next/headers';
+import {isOwnerEmail} from './access';
 export async function authClient(){
  const jar=await cookies();
  const url=process.env.SUPABASE_URL,key=process.env.SUPABASE_PUBLISHABLE_KEY;
@@ -9,6 +10,6 @@ export async function authClient(){
 }
 export async function owner(){
  const {data:{user},error}=await (await authClient()).auth.getUser();
- if(error||!user||!user.email||user.email.toLowerCase()!==process.env.SUPABASE_OWNER_EMAIL?.toLowerCase())throw Error('Entre com a conta proprietária do Livre.');
+ if(error||!user||!isOwnerEmail(user.email))throw Error('Entre com a conta proprietária do Livre.');
  return user;
 }
