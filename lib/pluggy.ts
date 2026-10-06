@@ -1,6 +1,7 @@
 import {isSupabase,sbStore} from './storage';
 const env=process.env;
 import {normalizeAccount,normalizeTransaction,nextPage} from './pluggy-data';
+import {normalizeBill,type CardBill} from './finance-summary';
 export class BankError extends Error{constructor(message:string,public status=400){super(message)}}
 export function checkOrigin(request:Request){const origin=request.headers.get('origin');if(origin!==new URL(request.url).origin)throw new BankError('Reabra o Livre para continuar.',403)}
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -30,9 +31,27 @@ export async function syncConnection(id:string){
  let path:string|null='/v2/transactions?accountId='+encodeURIComponent(a.id)+'&dateFrom='+from;
  const visited=new Set<string>();while(path){if(visited.has(path)||++requests>45)throw new BankError('Histórico muito grande para uma importação. Nenhum dado desta tentativa foi alterado.',422);visited.add(path);const d=await remote(path,apiKey);if(!Array.isArray(d.results))throw new BankError('Resposta de lançamentos inválida.',502);for(const t of d.results){const record=normalizeTransaction(t,account,id,categories.get('pluggy:tx:'+t.id));if(record){imports.push(record);txCount++;if(txCount>2500)throw new BankError('Há mais de 2.500 lançamentos nesta conexão. Nenhum dado desta tentativa foi alterado.',422)}}path=nextPage(d.next,a.id)}
  }
+ let billsUnavailable=0;
+ for(const account of imports.filter(r=>r.kind==='card')){
+  const previous=snapshot?.records.find((r:any)=>r.id===account.id)?.data;
+  try{
+   const bills=new Map<string,CardBill>();let billPage=1,billPages=1;
+   do{
+    if(++requests>45||billPage>5)throw new BankError('Limite de consultas de faturas atingido.',422);
+    const response=await remote('/bills?accountId='+encodeURIComponent(account.data.providerAccount)+'&pageSize=100&page='+billPage,apiKey);
+    if(!Array.isArray(response.results)||!Number.isInteger(response.totalPages)||response.totalPages<0)throw new BankError('Resposta de faturas inválida.',502);
+    billPages=Math.max(1,response.totalPages);
+    for(const raw of response.results){const bill=normalizeBill(raw);if(bill)bills.set(bill.id,bill)}billPage++;
+   }while(billPage<=billPages);
+   account.data.bills=Array.from(bills.values()).sort((a,b)=>b.dueDate.localeCompare(a.dueDate));
+   account.data.billsUpdatedAt=now;account.data.billsStatus=bills.size?'available':'empty';
+  }catch{
+   billsUnavailable++;account.data.bills=previous?.bills||[];account.data.billsUpdatedAt=previous?.billsUpdatedAt||null;account.data.billsStatus='unavailable';
+  }
+ }
  // Replace only this connection's imported snapshot. Keep manual data and other connections intact.
  await sbStore('bank_sync',{id,records:imports,syncedAt:now,status:item.status,accounts:imports.filter(r=>r.kind!=='transaction').length,transactions:txCount});
- return {accounts:imports.filter(r=>r.kind!=='transaction').length,transactions:txCount,skipped,syncedAt:now,partial:item.status==='PARTIAL_SUCCESS'};
+ return {accounts:imports.filter(r=>r.kind!=='transaction').length,transactions:txCount,skipped,billsUnavailable,syncedAt:now,partial:item.status==='PARTIAL_SUCCESS'};
 }
 export function bankError(e:unknown){if(e instanceof BankError)return Response.json({error:e.message},{status:e.status,headers:{'Cache-Control':'no-store'}});console.error('Bank operation failed',e instanceof Error?e.name:'Unknown');return Response.json({error:'Não foi possível concluir. Seus dados anteriores foram preservados.'},{status:503,headers:{'Cache-Control':'no-store'}})}
 

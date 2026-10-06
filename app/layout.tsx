@@ -3,6 +3,7 @@ import "./globals.css";
 import "./design.css";
 import "./refined.css";
 import "./mobile.css";
+import "./bills.css";
 
 export const metadata: Metadata = {
   title: "Livre — Finanças sem assinatura",
