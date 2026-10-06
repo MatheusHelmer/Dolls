@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./design.css";
+import "./refined.css";
+import "./mobile.css";
 
 export const metadata: Metadata = {
   title: "Livre — Finanças sem assinatura",

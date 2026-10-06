@@ -1,0 +1,25 @@
+.mobile-bottom-nav{display:none}
+@media(max-width:700px){
+ .app main{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+ .mobile-bottom-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:25;gap:4px;box-shadow:0 -4px 18px #102e2006}
+ .mobile-bottom-nav button{position:relative;display:flex;flex-direction:column;gap:5px;min-height:54px;padding:8px 2px;color:var(--muted);border-radius:10px;font-size:10px;font-weight:500;justify-content:center}
+ .mobile-bottom-nav button.active{color:var(--purple);background:var(--surface-soft);font-weight:650}
+ .mobile-bottom-nav button.active:before{display:none}
+ .mobile-menu{display:none}.breadcrumb{padding-left:5px}
+ .sidebar nav button{min-height:48px}.sidebar .profile{padding-bottom:20px}
+ .logout-form{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+ .period{width:100%;justify-content:space-between}.period button{min-height:44px;min-width:44px}.period-row{margin-bottom:18px}
+ .transactions{padding:18px 14px 4px}.transactions .panel-title{margin-bottom:10px}
+ .transaction-table,.transaction-table tbody{display:block;width:100%}.transaction-table thead{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .transaction-table tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 12px;padding:17px 6px;border-bottom:1px solid var(--line)}
+ .transaction-table td{display:block;min-width:0;border:0;padding:0;white-space:normal;font-size:12px}
+ .transaction-table td:first-child{grid-column:1;grid-row:1;display:flex;align-items:flex-start;min-width:0;gap:10px;font-size:14px;font-weight:550;overflow-wrap:anywhere}
+ .transaction-table td:first-child>span:last-child{min-width:0}.transaction-table td small{font-size:11px;font-weight:400;line-height:1.5}
+ .transaction-table .tx-icon{width:30px;height:30px;border-radius:8px}.transaction-table .tx-amount{grid-column:2;grid-row:1;align-self:start;font-size:14px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;padding-top:3px}
+ .transaction-table .tx-category{grid-column:1;grid-row:2;margin-left:40px;align-self:center}.transaction-table .category-select{max-width:100%;min-height:44px;padding:8px;font-size:12px}
+ .transaction-table .tx-date{grid-column:2;grid-row:2;text-align:right;align-self:center;color:var(--muted)}
+ .transaction-table .tx-status{grid-column:1;grid-row:3;margin-left:40px}.transaction-table .status{min-height:36px;padding:6px 10px}.transaction-table .tx-actions{grid-column:2;grid-row:3;text-align:right;align-self:center}.transaction-table .tx-actions .tag{font-size:10px}.transaction-table .actions button{min-width:44px;min-height:44px;padding:10px}
+ .search input{min-height:48px;font-size:16px}.category-select:focus-visible{outline-offset:1px}.filters .segmented button{flex:1;font-size:13px}.bank-form input{min-height:48px}.bank-guide summary,.credential-settings summary{min-height:44px;align-content:center}
+ .bank-connection .secondary,.remove-bank{min-height:44px}.remove-bank{min-width:44px}.account-row>div{min-width:0}.account-row strong{overflow-wrap:anywhere}.modal .panel-title>button{min-height:44px;min-width:44px}.modal .form-footer{gap:10px}.modal .checkbox{min-height:44px}.modal .checkbox input{width:22px;height:22px;flex-shrink:0}.primary,.secondary,.text-button{min-height:44px}
+}
+@media(max-width:360px){.transaction-table .tx-amount{font-size:12px}.transaction-table td:first-child{font-size:13px}.metric h2{font-size:17px}.metric>div{font-size:11px}.metric small{font-size:10px}}
