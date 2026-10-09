@@ -1,0 +1,94 @@
+/* Monochrome interface. Color is reserved for financial indicators. */
+:root {
+  --ink: #18181b;
+  --muted: #68686f;
+  --line: #e5e5e8;
+  --surface: #ffffff;
+  --surface-soft: #f4f4f5;
+  --purple: #18181b;
+  --green: #168052;
+  --danger: #bd3d46;
+  --radius: 12px;
+  color-scheme: light;
+}
+html[data-theme=dark] {
+  --ink: #f4f4f5;
+  --muted: #a1a1aa;
+  --line: #303034;
+  --surface: #18181b;
+  --surface-soft: #242427;
+  --purple: #f4f4f5;
+  --green: #65d5a0;
+  --danger: #ff929a;
+  color-scheme: dark;
+}
+body { background: #fafafa; }
+html[data-theme=dark] body { background: #101012; }
+.sidebar, header { background: var(--surface); }
+.brand > span:first-child { background: #18181b; border-radius: 9px; }
+.brand .brand-dot { color: var(--ink); }
+.nav-label { color: var(--muted); }
+nav button { position: relative; }
+nav button.active { color: var(--ink); background: var(--surface-soft); }
+nav button.active:before { left: 0; background: var(--ink); }
+.primary, html[data-theme=dark] .primary {
+  background: var(--ink);
+  color: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: none;
+  border-radius: 8px;
+}
+.primary:hover, html[data-theme=dark] .primary:hover { background: var(--ink); opacity: .88; box-shadow: none; }
+.secondary, .period, .search, .bank-form input, .modal input, .modal select { border-radius: 8px; }
+.secondary:hover { background: var(--surface-soft); }
+.theme-toggle, .avatar, .profile > span, .account-icon, .item-symbol,
+.bank-symbol, .bank-count, .free-icon { background: var(--surface-soft); color: var(--ink); }
+.panel, .metric { border-radius: var(--radius); box-shadow: 0 2px 6px #18181b03; }
+.panel:hover { border-color: var(--line); }
+.metric { position: relative; overflow: hidden; }
+.metric.featured, html[data-theme=dark] .metric.featured {
+  background: #18181b;
+  border-color: #18181b;
+  color: #fff;
+  box-shadow: none;
+}
+.metric.featured > div, .metric.featured small,
+html[data-theme=dark] .metric.featured > div, html[data-theme=dark] .metric.featured small { color: #c9c9cf; }
+.metric.featured h2 { color: #fff; }
+.metric h2 { letter-spacing: -1px; font-weight: 650; }
+.metric:has(.income):before, .metric:has(.expense):before {
+  content: ''; position: absolute; top: 22px; left: 0; width: 3px; height: 24px; border-radius: 0 3px 3px 0;
+}
+.metric:has(.income):before { background: var(--green); }
+.metric:has(.expense):before { background: var(--danger); }
+.income, .done, html[data-theme=dark] .income, html[data-theme=dark] .done {
+  color: var(--green); background: color-mix(in srgb, var(--green) 9%, transparent);
+}
+.expense { color: var(--danger); background: color-mix(in srgb, var(--danger) 9%, transparent); }
+.red, .error { color: var(--danger); }
+.pending { color: #95600a; background: #b7790d12; }
+html[data-theme=dark] .pending { color: #edbd67; background: #edbd6714; }
+.status { font-weight: 550; border-radius: 5px; }
+.status:before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.tag, .category-select, .free-badge { background: var(--surface-soft); color: var(--muted); }
+th { background: var(--surface-soft); font-weight: 600; }
+td { border-color: var(--line); }
+.transactions .panel-title h3, .panel-title h3 { letter-spacing: -.3px; }
+.credit-card { background: #202023; border: 1px solid #39393e; }
+.credit-card .item-symbol { color: #f4f4f5; background: #ffffff12; }
+.bank-intro, .bank-slots > div, .cash-explanation, .bill-entry { background: var(--surface-soft); border-color: var(--line); }
+.bank-intro { border-radius: 12px; }
+.bank-guide li > span { background: var(--surface-soft); color: var(--ink); }
+.income-bar { background: var(--green); }
+.expense-bar { background: var(--danger); }
+.success { color: var(--green); background: color-mix(in srgb, var(--green) 8%, transparent); border-color: color-mix(in srgb, var(--green) 25%, transparent); }
+.login-page .panel { border-radius: 16px; box-shadow: 0 16px 60px #00000008; }
+.mobile-bottom-nav { box-shadow: 0 -1px 12px #00000004; }
+.mobile-bottom-nav button.active { color: var(--ink); background: var(--surface-soft); }
+.menu-backdrop.visible { background: #00000099; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #3478d4; outline-offset: 3px; }
+@media(max-width:700px) {
+  .metric, .panel { border-radius: 12px; }
+  .metric h2 { letter-spacing: -.7px; }
+  .modal { border-radius: 18px 18px 0 0; }
+}
